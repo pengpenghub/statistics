@@ -1,0 +1,43 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+导入数据
+
+rawdata=pd.read_csv(r'C:\Users\sas\Desktop\data.txt',sep='\t',header=None)
+
+将数据转为数组
+
+rawarray=np.array(rawdata)
+
+求矩阵各列均值
+
+average=np.mean(rawarray,axis=0)
+
+将矩阵均值化0
+
+m,n=rawarray.shape
+
+data_adjust=[]
+
+avgs=np.tile(average,(m,1))
+
+data_adjust=rawarray-avgs
+
+求协方差矩阵
+
+covX=np.cov(data_adjust.T)
+
+求特征值和特征向量
+
+featValue,featVector=np.linalg.eig(covX)
+
+对特征值进行排序
+
+featValueIndex=np.argsort(-featValue)
+
+使用标准化矩阵乘以前k个特征值对应的特征向量矩阵得到降维后的矩阵
+
+final_data=data_adjust*np.matrix(featVector.T[featValueIndex[:3]].T)
+
+final_data
